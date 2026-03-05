@@ -15,20 +15,21 @@ import matplotlib.pyplot as plt
 # ### 1. Carregamento e inspeção inicial dos dados:
 
 # In[3]:
-
-
-with open("../data/adult.data", "r") as file:
-    for i in range(5):
-        print(file.readline())
+def read_adult_data(path:int="../data/adult.data") -> None:
+    with open(path, "r") as file:
+        for i in range(5):
+            print(file.readline())
+    return 
 
 
 # In[4]:
 
+def read_adult_names(path:int="../data/adult.names") -> None:
 
-with open("../data/adult.names", "r") as file:
-    for i, linha in enumerate(file):
-        print(i, linha.strip())
-
+    with open(path, "r") as file:
+        for i, linha in enumerate(file):
+            print(i, linha.strip())
+    return
 
 # Após uma análise dos arquivos "adult.data" e "adult.names" foi possível descobrir o nome das colunas em ordem para a estruturação do dataframe: 
 # 
@@ -81,18 +82,20 @@ with open("../data/adult.names", "r") as file:
 
 # In[5]:
 
+def get_dataframe(path:str = "../data/adult.data") -> pd.DataFrame:
+    colunas = ["age", "workclass", "fnlwgt", "education", 
+            "education-num", "marital-status", "occupation",
+            "relationship", "race", "sex", "capital-gain", 
+            "capital-loss", "hours-per-week", "native-country", "income"]
 
-colunas = ["age", "workclass", "fnlwgt", "education", 
-           "education-num", "marital-status", "occupation",
-           "relationship", "race", "sex", "capital-gain", 
-           "capital-loss", "hours-per-week", "native-country", "income"]
+    df = pd.read_csv(path, names=colunas, sep=",")
 
-df = pd.read_csv("../data/adult.data", names=colunas, sep=",")
+    for c in df.columns:
+        if df[c].dtype == "str":
+            df[c] = df[c].str.strip() 
 
-for c in df.columns:
-    if df[c].dtype == "str":
-        df[c] = df[c].str.strip() 
-
+    return df 
+df = get_dataframe()
 
 # In[6]:
 
@@ -151,7 +154,6 @@ print(df[num].describe())
 
 
 # In[9]:
-
 
 fig, axes = plt.subplots(2, 3, figsize=(15, 8))
 axes = axes.flatten()
